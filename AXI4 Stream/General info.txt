@@ -1,0 +1,23 @@
+Signal Name	| Source | Description
+------------------------------------------------------------------------------------------------------------------
+ACLK       	| Global | The global clock signal.
+ARESETn		| Global | The global reset signal.
+TVALID		| Master | Indicates that the master is driving a valid transfer
+TREADY		| Slave  | Indicates that the slave can accept a transfer in the current cycle
+TDATA		| Master | The payload to be transfered and is an integer number of bytes in width
+TSTRB		| Master | Byte qualifier that indicates whether the content of TDATA is a data byte or position byte
+TKEEP		| Master | Byte qualifier that indicates whether the content of TDATA is part of the data stream
+TLAST		| Master | Indicates the boundary of a packet
+TID		   	| Master | Data stream identifier that identifies different streams (Not required)
+TDEST		| Master | Provides routing information for the data stream (Not required)
+TUSER		| Master | User defined sideband info that can be transmitted alongside the data stream (Not required)
+
+
+TSTRB   | TKEEP   | Operation
+---------------------------------------------
+1       | 1       | Byte is valid data byte
+1       | 0       | Byte is position byte
+0       | 0       | Byte is ignored
+0       | 1       | Not valid
+
+
