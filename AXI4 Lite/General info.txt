@@ -1,0 +1,103 @@
+AXI4 Lite Buses :
+	- Write Address  Driven by the master
+	- Write Data     Driven by the master
+	- Write Response Driven by the slave
+	- Read Address   Driven by the master
+	- Read Data      Driven by the slave
+
+
+### WRITE OPERATIONS BEGIN ###
+-- Address Write Bus signals
+Signal Name	| Source | Description
+-------------------------------------------------------------------------
+ACLK       	| Global | The global clock signal.
+ARESETn		| Global | The global reset signal.
+AWVALID		| Master | Write address from master is valid
+AWREADY		| Slave  | Slave is ready to accept write address from master
+AWADDRESS	| Master | The write address for the single write operation
+AWPROT		| Master | Access protections. Optional
+
+
+-- Protection Values for each Bus
+Prot Bit | Description
+Prot[0]  | 0 = Unprivileged access
+         | 1 = Privileged access
+Prot[1]  | 0 = Secure access
+         | 1 = Unsecure access
+Prot[2]  | 0 = Data access
+         | 1 = Instruction access
+
+-- Data Write Bus signals          
+Signal Name	| Source | Description
+-------------------------------------------------------------------------
+ACLK       	| Global | The global clock signal.
+ARESETn		| Global | The global reset signal.
+WVALID		| Master | Write data from master is valid
+WREADY		| Slave  | Slave is ready to accept write data from master
+WDATA		| Master | The write data for the single write operation
+WSTROBE		| Master | Identifies which bytes of the data are valid
+
+
+-- Write Response Bus signals          
+Signal Name	| Source | Description
+-------------------------------------------------------------------------
+ACLK       	| Global | The global clock signal.
+ARESETn		| Global | The global reset signal.
+BVALID		| Slave  | Write Response is valid from slave
+BREADY		| Master | Master is ready to accept response
+BRESP		| Slave  | Response information from slave
+
+BRESP values : 
+Response | Resp[1:0] | Description
+--------------------------------------------------------------------------
+OKAY	 | 00        | The write operation was a success
+EXOKAY   | 01 		 | Exclusive access is okay
+SLVERR   | 10 		 | The slave reports and error but address is in range
+DECERR	 | 11 		 | The address was not in range of the slave
+
+Write transaction flow :
+(Master) Write address & Write address valid
+(Slave ) Write address ready
+(Master) Write data & Write data valid
+(Slave ) Write data ready
+(Slave ) Response & Response valid
+(Master) Response ready
+
+### WRITE OPERATIONS END ###
+
+### READ OPERATIONS BEGIN ###
+-- Address Read Bus Signals
+Signal Name	| Source | Description
+-------------------------------------------------------------------------
+ACLK       	| Global | The global clock signal.
+ARESETn		| Global | The global reset signal.
+ARVALID		| Master | Read address from master is valid
+ARREADY		| Slave  | Slave is ready to accept read address from master
+ARADDRESS	| Master | The read address for the single write operation
+ARPROT		| Master | Access protections. Optional
+
+-- Data Read Bus signals          
+Signal Name	| Source | Description
+-------------------------------------------------------------------------
+ACLK       	| Global | The global clock signal.
+ARESETn		| Global | The global reset signal.
+RVALID		| Slave  | Write data from master is valid
+RREADY		| Master | Master is ready to accept read data from slave
+RDATA		| Slave  | Read data from slave
+RRESP		| Slave  | Read response from slave
+
+RRESP values : 
+Response | Resp[1:0] | Description
+--------------------------------------------------------------------------
+OKAY	 | 00        | The read operation was a success
+EXOKAY   | 01 		 | Exclusive access is okay
+SLVERR   | 10 		 | The slave reports and error but address is in range
+DECERR	 | 11 		 | The address was not in range of the slave
+
+Write transaction flow :
+(Master) Read address & Read address valid
+(Slave ) Read address ready
+(Slave ) Read data & Read Response & Read data valid
+(Master) Read data ready
+
+###  READ OPERATIONS END  ###
